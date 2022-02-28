@@ -6,7 +6,7 @@ gap1 = 0.001;
 gap2 = 0.002;
 th = 2;
 
-
+a = 0;
 
 arm_a();
 arm_b();
@@ -20,7 +20,12 @@ difference()
 {
     union()
     {
-        translate([8, -10/2, 0]) cube([120-8, 10, 15]);
+        if(a){
+            translate([8, -10/2, 0]) cube([120-8, 10, 15]);
+        }else{
+            translate([8, -10/2, 0]) cube([120-8-40, 10, 15]);
+            translate([71.34, 0, 0]) rotate([0, 0, -60]) cube([70, 10, 15]);
+        }
         translate([10, 0, -27]) rotate([0, 90, 0]) cylinder(10, 50, 50, $fn=100);
         translate([10-2, 0, -27+4]) rotate([0, 90, 0]) cylinder(2, 50, 50, $fn=100);
         translate([20, 0, -27+4]) rotate([0, 90, 0]) cylinder(2, 50, 50, $fn=100);
@@ -33,19 +38,34 @@ difference()
     translate([0, 35, -10]) cube([40, 100, 40]);
     translate([0, -35-100, -10]) cube([40, 100, 40]);
     
-    translate([8-gap1, 0, 10]) rotate([0, 90, 0]) cylinder(65-8-17, 2.5, 2.5, $fn=100);
-    translate([65-8-8, 0, 10]) rotate([0, 90, 0]) cylinder(16, 2.5, 2.5, $fn=100);
     
-    translate([8-gap1, -5/2, 0-gap1]) cube([65-8, 5, 10]);
+    if(a){
+        translate([8-gap1, -5/2, 0-gap1]) cube([65-8, 5, 10]);
+        translate([8-gap1, 0, 10]) rotate([0, 90, 0]) cylinder(65-8-17, 2.5, 2.5, $fn=100);
+        translate([65-8-8, 0, 10]) rotate([0, 90, 0]) cylinder(16, 2.5, 2.5, $fn=100);
+    }else{
+        translate([52, 43.5, 0]) rotate([0, 0, -60]) translate([49.5+0.25, -5/2, 0-gap1]) cube([15.5, 5, 10]);
+        translate([8-gap1, -5/2, 0-gap1]) cube([65-8+7, 5, 10]);
+        translate([8-gap1, 0, 10]) rotate([0, 90, 0]) cylinder(65-8-17+24, 2.5, 2.5, $fn=100);
+    }
     translate([1.5-gap1, -2.5, -gap1]) cube([6.5+gap2, 5, 10]);
     translate([1.5-gap1, -2.5, -gap1]) cube([2, 7.5, 10]);
     
     translate([-4, -42, 1]) rotate([-25, 0, 0]) rotate([0, -20, 0]) cube([15, 7.5, 5.5]);
     translate([-4, -42, 1]) rotate([-25, 0, 0]) rotate([0, -20, 0]) translate([15, 7.5, 0]) rotate([0, -20, 180]) cube([16, 17.5, 20]);
     
-    translate([120, 10, 0]) rotate([0, -30, 180]) cube([50, 20, 20]);
+    if(a){
+        translate([120, 10, 0]) rotate([0, -30, 180]) cube([50, 20, 20]);
+    }else{
+        translate([120, -53, 0]) rotate([0, -30, 180-60]) cube([50, 20, 20]);
+    }
     
-    translate([57, 6, 4]) rotate([90, 9, 0]) rear_screw_hole();
+    if(a){
+        translate([57, 6, 4]) rotate([90, 9, 0]) rear_screw_hole();
+    }else{
+        translate([52, 43.5, 0]) rotate([0, 0, -60])
+        translate([57, 6, 4]) rotate([90, 9, 0]) rear_screw_hole();
+    }
 }
 difference()
 {
@@ -53,7 +73,12 @@ difference()
 
     translate([-30, -100, -200]) cube([200, 200, 200]);
 }
-translate([50-2-0.5, -10/2, 0]) cube([2, 10, 15]);
+if(a){
+    translate([50-2-0.5, -10/2, 0]) cube([2, 10, 15]);
+}else{
+    translate([49, -10/2+2.5, 0]) cube([2, 2, 2]);
+    translate([60, -10/2+2.5+3, 0]) cube([2, 2, 2]);
+}
 translate([10, -10/2+2.5+3, 0]) cube([2, 2, 2]);
 translate([22, -10/2+2.5, 0]) cube([2, 2, 2]);
 translate([35, -10/2+2.5+3, 0]) cube([2, 2, 2]);
@@ -63,17 +88,33 @@ translate([35, -10/2+2.5+3, 0]) cube([2, 2, 2]);
 
 module arm_b ()
 {
-difference()
-{
-    union()
+    if(a)
     {
-        translate([50, -10/2, -50]) cube([15, 10, 50]);
-        translate([50, -4/2, 0-gap1]) cube([15, 4, 9]);
+        difference()
+        {
+        union()
+        {
+            translate([50, -10/2, -50]) cube([15, 10, 50]);
+            translate([50, -4/2, 0-gap1]) cube([15, 4, 9]);
+        }
+        translate([65, 10, -50]) rotate([0, 90-45, 180]) cube([20, 20, 50]);
+        
+        translate([57, 2.5, 4]) rotate([90, 9, 0]) screw_hole();
+        }
+    }else{
+        translate([52, 43.5, 0]) rotate([0, 0, -60])
+        difference()
+        {
+        union()
+        {
+            translate([50, -10/2, -50]) cube([15, 10, 50]);
+            translate([50, -4/2, 0-gap1]) cube([15, 4, 9]);
+        }
+        translate([65, 10, -50]) rotate([0, 90-60, 180]) cube([20, 20, 50]);
+        
+        translate([57, 2.5, 4]) rotate([90, 9, 0]) screw_hole();
+        }
     }
-    translate([65, 10, -50]) rotate([0, 90-45, 180]) cube([20, 20, 50]);
-    
-    translate([57, 2.5, 4]) rotate([90, 9, 0]) screw_hole();
-}
 }
 
 
